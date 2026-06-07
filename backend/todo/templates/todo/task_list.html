@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django To-Do List</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; text-align: center; direction: rtl; }
+        input[type="text"] { padding: 10px; width: 70%; font-size: 16px; }
+        button { padding: 10px; font-size: 16px; cursor: pointer; }
+        ul { list-style-type: none; padding: 0; text-align: right; margin-top: 20px; }
+        li { padding: 12px; border-bottom: 1px solid #ccc; background: #fafafa; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h2>רשימת המשימות שלי (מתוך MySQL ב-Docker)</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="הקלידו משימה חדשה..." required>
+        <button type="submit">הוסף</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }} <small>({{ task.created_at|date:"H:i" }})</small></li>
+        {% empty %}
+            <li>אין משימות ברשימה כרגע.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
