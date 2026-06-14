@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-f0aabsypx%ueye0zkln-t=!cwr94lth)2aa7)()!zllsiq0kf0
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "#"
+"testing-backend-jb4u.onrender.com"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
