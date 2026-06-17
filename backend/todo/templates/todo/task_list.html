@@ -7,12 +7,58 @@
         body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; text-align: center; direction: rtl; }
         input[type="text"] { padding: 10px; width: 70%; font-size: 16px; }
         button { padding: 10px; font-size: 16px; cursor: pointer; }
+        a { padding: 6px 10px; margin: 4px; display: inline-block; text-decoration: none; border: 1px solid #333; color: #333; }
         ul { list-style-type: none; padding: 0; text-align: right; margin-top: 20px; }
         li { padding: 12px; border-bottom: 1px solid #ccc; background: #fafafa; margin-bottom: 5px; }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+            background-color: #e8e8e8;
+        }
+
+        .delete {
+            color: red;
+            border-color: red;
+        }
+        .dashboard {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            flex: 1;
+            background: white;
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .card strong {
+            display: block;
+            font-size: 22px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <h2>רשימת המשימות שלי (מתוך MySQL ב-Docker)</h2>
+    <div class="dashboard">
+    <div class="card">
+        סה"כ משימות
+        <strong>{{ total_tasks }}</strong>
+    </div>
+
+    <div class="card">
+        בוצעו
+        <strong>{{ completed_tasks }}</strong>
+    </div>
+
+    <div class="card">
+        פתוחות
+        <strong>{{ open_tasks }}</strong>
+    </div>
+</div>
     <form method="POST">
         {% csrf_token %}
         <input type="text" name="title" placeholder="הקלידו משימה חדשה..." required>
@@ -20,7 +66,23 @@
     </form>
     <ul>
         {% for task in tasks %}
-            <li>{{ task.title }} <small>({{ task.created_at|date:"H:i" }})</small></li>
+            <li class="{% if task.completed %}completed{% endif %}">
+                {{ task.title }}
+                <small>({{ task.created_at|date:"H:i" }})</small>
+
+                <br><br>
+
+                <a href="{% url 'toggle_task' task.id %}">
+                    {% if task.completed %}
+                        סמן פתוח
+                    {% else %}
+                        סמן בוצע
+                    {% endif %}
+                </a>
+                <a class="delete" href="{% url 'delete_task' task.id %}">
+                    מחק
+                </a>
+            </li>
         {% empty %}
             <li>אין משימות ברשימה כרגע.</li>
         {% endfor %}

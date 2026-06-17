@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import pymysql
 pymysql.install_as_MySQLdb()
+import os
+import dj_database_url
 
 from pathlib import Path
 from decouple import config
@@ -29,14 +31,8 @@ SECRET_KEY = 'django-insecure-f0aabsypx%ueye0zkln-t=!cwr94lth)2aa7)()!zllsiq0kf0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-"testing-backend-jb4u.onrender.com"
-]
+ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8080",
-    "https://*.onrender.com",
-]
 
 # Application definition
 
@@ -82,15 +78,12 @@ WSGI_APPLICATION = 'To_Do.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default='5432'),
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 
